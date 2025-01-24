@@ -50,3 +50,59 @@ Pro lokální setup musíte nejprve nainstalovet packages a to uděláte pomocí
 Pro vytvoření lokální databáze použijte ``npx prisma migrate dev``, to vytvoří lokální sqlite databázi
 Nakonec, pro spuštění vývojového serveru použijte ```npm run dev```, v konzoli se vám napíše adresa vývojového serveru a ten poté zadejte do prohlížeče.
 
+# Pages
+V Next.js se správa stránek a routingu provádí pomocí složek a souborů v adresáři app.
+Každý soubor page.tsx uvnitř složky je automaticky dostupný jako samostatná stránka:
+**Příklad**
+```
+/app
+  /auth
+    page.tsx
+```
+**Výsledná URL:**
+```
+/auth
+```
+
+Pokud přidáte další page.tsx do podsložky, vytvoří se podstránka:
+**Příklad**
+```
+/app
+  /auth
+    /login
+      page.tsx
+```
+
+**Výsledná URL:**
+```
+/auth/login
+```
+
+## Seskupování stránek bez změny URL
+**Adresářová struktura:**
+```
+/app
+  /(auth)
+    /login
+      page.tsx
+```
+
+**Výsledná URL:**
+```
+/login
+```
+
+## Dynamické parametry
+**Adresářová struktura:**
+```
+/app
+  /product
+    /[id]
+      page.tsx
+
+```
+
+**Výsledná URL:**
+```
+/product/123
+```
