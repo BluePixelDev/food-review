@@ -1,22 +1,52 @@
-Tohle je interní složka pro dokumentaci projektu v rámci týmu. Zde budete dokumentovat části kódu, které jste napsali.
+# Pravidla
+Zde je přehled pravidel ve stručném formátu pro tým při vývoji React webové aplikace pomocí Scrum metodiky:
+Pravidla pro vývoj týmu
 
-## Pravidla
-- Nešahejte do kódu někoho jiného bez jeho vědomí. V případě nějaké chyby vytvořte na [github issues](https://github.com/BluePixelDev/food-review/issues) novou issue a tagněte toho koho se to týká
-- Nešahat na master branch, master branch je určená jen pro fungující a mergnutý kód
-- Vyvíjejte na svých vlastní branších, ty potom mergneme
+**Použití Typescriptu**
+- Všechny soubory budou používat Typescript (.tsx nebo .ts) místo JavaScriptu.
+- Soubory React komponent by měly mít příponu .tsx.
 
-## Setup
-Aby jste mohli locálně spustit tento program musíte:
-- Nainstalovat dependecies pomocí ```npm i```
-- Vytvořit lokální databázi příkazem ```npx prisma migrate dev --name Init```
-- Pokuď pak chcete spustit development tak pužijte ```npm run dev```
+**Práce s Gitem**
+- Neprovádějte commity přímo do master branch.
+- Vytvořte vlastní branch pro změny, kterou následně mergneme s hlavní branch po schválení.
+- Commit zprávy by měli mít smysluplné názvy a měli by popisovat co jste změnili a na čem pracujete.
+- Každý merge do hlavní branch by měl projít code review jiným členem týmu.
 
-## Aliasy
-Nakonfiguroval jsem pár aliasu (zkracovače importů).
-Například míst import button from "./src/components/ui/button, použijete import button "$components/ui/button$ 
-- ```$components``` - src/components 
-    - Zde jsou uložené různé komponenty viz tlačítka atd...
-- ```$lib``` - src/lib
-    - Zde jsou skripty
+**Dokumentace**
+- Udržujte dokumentaci aktuální (README, specifikace API, přehled komponent).
+- Při složitějších funkcích přidejte komentáře přímo do kódu nebo přiložte popis v Markdown souboru.
 
-(V případě že by jjste chtěli nakonfigurovat další, tak min napište)
+**Respektování kódu ostatních**
+- Bez souhlasu autora neměňte a neupravujte kód ostatních členů týmu.
+- V případě že naleznete bug nebo máte připomínku tak na github vytvořte novou issue a tagněte tvůrce kódu
+
+**Stylování s Tailwind CSS**
+- Pro stylizaci prvků používejte výhradně Tailwind CSS.
+- Nepoužívejte vlastní třídy nebo inline styly, pokud to není nezbytné.
+
+**Pojmenovávací konvence**
+- React komponenty: Pojmenovávejte pomocí CamelCase (např. UserProfile.tsx).
+- Typescript soubory: Používejte kebab-case pro názvy souborů (např. user-profile.ts).
+
+**Modulární architektura**
+- Rozdělujte projekt na logické moduly (např. ``features``, ``components``,``services``, ``utils``).
+- Složky modulů by měly obsahovat pouze relevantní soubory a být přehledné.
+
+**Dodržujte Single Responsibility Principle (SRP)**
+- Každá komponenta nebo funkce by měla mít jednu jasnou odpovědnost.
+- Nepište příliš velké komponenty, rozdělte je na menší, znovupoužitelné části.
+
+**Kódová konzistence**
+- Dodržujte stejný styl psaní kódu.
+- Nezapomeňte odstranit testovací konzolové logy.
+
+**IDE**
+- Doporučuju aby jste si stáhly, nebo pokuď už máte, použili **visual studio code** s doporučenými rozšířeními (Jsou zahrnuty v repu a autamaticky se vám navrhout při otevření ve VS code.
+
+---
+
+# Setup
+Pro lokální setup musíte nejprve nainstalovet packages a to uděláte pomocí ```npm i```
+Pro vytvoření lokální databáze použijte ``npx prisma migrate dev``, to vytvoří lokální sqlite databázi
+Nakonec, pro spuštění vývojového serveru použijte ```npm run dev```, v konzoli se vám napíše adresa vývojového serveru a ten poté zadejte do prohlížeče.
+
