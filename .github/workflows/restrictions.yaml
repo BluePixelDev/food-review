@@ -1,0 +1,17 @@
+name: Enforce PR from Master to Production
+
+on:
+  pull_request:
+    branches:
+      - production
+
+jobs:
+  check-source-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if source branch is master
+        if: github.head_ref != 'master'
+        run: |
+          echo "Only pull requests from 'master' to 'production' are allowed."
+          exit 1
