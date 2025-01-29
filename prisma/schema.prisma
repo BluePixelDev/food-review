@@ -7,16 +7,63 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model User {
-  id Int @default(autoincrement())
-  username String
-
-  @@id([id])
+model MealUser {
+id Int @id @default(autoincrement())
+firstName String @db.VarChar(20)
+lastName String @db.VarChar(20)
+email String @db.VarChar(50)
+password String @db.VarChar(100)
+alternativeConnections AlternativeConnection[]
+ratings Rating[]
 }
 
-model Food {
-  id Int @default(autoincrement())
-  name String
+model AlternativeConnection {
+id Int @id @default(autoincrement())
+userId Int
+provider String @db.VarChar(100)
+userProviderId String @db.VarChar(20)
+mealUser MealUser @relation(fields: [userId], references: [id])
+}
 
-  @@id([id])
+model Meal {
+id Int @id @default(autoincrement())
+name String @db.VarChar(50)
+pathToMealPicture String @db.VarChar(1000)
+preparedMeals PreparedMeal[]
+haveAllergen HaveAllergen[]
+}
+
+model PreparedMeal {
+id Int @id @default(autoincrement())
+mealId Int
+averageRating Float
+averageTemperature Float
+meal Meal @relation(fields: [mealId], references: [id])
+ratings Rating[]
+}
+
+model Rating {
+id Int @id @default(autoincrement())
+userId Int
+preparedMealId Int
+ratedStars Int
+messageFromUser String? @db.VarChar(1000)
+mealTemperature Float
+mealUser MealUser @relation(fields: [userId], references: [id])
+preparedMeal PreparedMeal @relation(fields: [preparedMealId], references: [id])
+}
+
+model Allergen {
+id Int @id @default(autoincrement())
+name String @db.VarChar(25)
+consequences String @db.VarChar(1000)
+haveAllergen HaveAllergen[]
+}
+
+model HaveAllergen {
+id Int @id @default(autoincrement())
+mealId Int
+allergenId Int
+meal Meal @relation(fields: [mealId], references: [id])
+allergen Allergen @relation(fields: [allergenId], references: [id])
 }
