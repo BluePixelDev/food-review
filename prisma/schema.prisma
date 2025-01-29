@@ -7,63 +7,87 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model MealUser {
-id Int @id @default(autoincrement())
-firstName String @db.VarChar(20)
-lastName String @db.VarChar(20)
-email String @db.VarChar(50)
-password String @db.VarChar(100)
-alternativeConnections AlternativeConnection[]
-ratings Rating[]
+model User {
+  id       Int     @id @default(autoincrement())
+  username String
+  email    String
+  password String?
+
+  //---- Relations ----
+  authProvider AuthProvider[]
+  ratings      Rating[]
 }
 
-model AlternativeConnection {
-id Int @id @default(autoincrement())
-userId Int
-provider String @db.VarChar(100)
-userProviderId String @db.VarChar(20)
-mealUser MealUser @relation(fields: [userId], references: [id])
+enum AuthProviderType {
+  MICROSOFT
+}
+
+model AuthProvider {
+  id             Int              @id @default(autoincrement())
+  userId         Int
+  provider       AuthProviderType
+  userProviderId String
+
+  //---- Relations ----
+  mealUser User @relation(fields: [userId], references: [id])
+  @@unique([provider, userProviderId])
 }
 
 model Meal {
-id Int @id @default(autoincrement())
-name String @db.VarChar(50)
-pathToMealPicture String @db.VarChar(1000)
-preparedMeals PreparedMeal[]
-haveAllergen HaveAllergen[]
+  id            Int            @id @default(autoincrement())
+  name          String
+  imageUrl      String
+  preparedMeals PreparedMeal[]
+  mealAllergen  MealAllergen[]
 }
 
 model PreparedMeal {
-id Int @id @default(autoincrement())
-mealId Int
-averageRating Float
-averageTemperature Float
-meal Meal @relation(fields: [mealId], references: [id])
-ratings Rating[]
+  id                 Int   @id @default(autoincrement())
+  mealId             Int
+  averageRating      Float
+  averageTemperature Float
+
+  //---- Relations ----
+  meal    Meal     @relation(fields: [mealId], references: [id])
+  ratings Rating[]
 }
 
 model Rating {
-id Int @id @default(autoincrement())
-userId Int
-preparedMealId Int
-ratedStars Int
-messageFromUser String? @db.VarChar(1000)
-mealTemperature Float
-mealUser MealUser @relation(fields: [userId], references: [id])
-preparedMeal PreparedMeal @relation(fields: [preparedMealId], references: [id])
+  id              Int     @id @default(autoincrement())
+  userId          Int
+  preparedMealId  Int
+  stars           Int
+  reviewMessage   String?
+  mealTemperature Float
+
+  //---- Relations ----
+  user         User         @relation(fields: [userId], references: [id])
+  preparedMeal PreparedMeal @relation(fields: [preparedMealId], references: [id])
+
+  // Ensures that only one review can be made per user per meal
+  @@unique([userId, preparedMealId])
+  @@index([preparedMealId])
 }
 
 model Allergen {
-id Int @id @default(autoincrement())
-name String @db.VarChar(25)
-consequences String @db.VarChar(1000)
-haveAllergen HaveAllergen[]
+  id           Int    @id @default(autoincrement())
+  name         String
+  consequences String
+
+  //---- Relations ----
+  mealAllergens MealAllergen[]
 }
 
-model HaveAllergen {
-id Int @id @default(autoincrement())
-mealId Int
-allergenId Int
-meal Meal @relation(fields: [mealId], references: [id])
-allergen Allergen @relation(fields: [allergenId], references: [id])
+model MealAllergen {
+  id         Int @id @default(autoincrement())
+  mealId     Int
+  allergenId Int
+
+  //---- Relations ----
+  meal     Meal     @relation(fields: [mealId], references: [id])
+  allergen Allergen @relation(fields: [allergenId], references: [id])
+
+  @@unique([mealId, allergenId])
+  @@index([mealId])
+  @@index([allergenId])
 }
