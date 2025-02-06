@@ -1,9 +1,18 @@
-import ReviewButton from "@/components/ReviewButton";
+import Banner from "@/components/Banner";
+import ContentArea from "@/components/ContentArea";
+import ReviewBox from "@/components/ReviewBox";
 
 export default function Home() {
   return (
     <>
-      <ReviewButton></ReviewButton>
+      <Banner />
+      <ContentArea>
+        <ReviewBox />
+        <ReviewBox />
+        <ReviewBox />
+        <ReviewBox />
+      </ContentArea>
+
     </>
   );
 }

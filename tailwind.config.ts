@@ -11,6 +11,8 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        submit: "#8FB339",
+        submit_darker: "#668935"
       },
     },
   },

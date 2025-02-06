@@ -1,9 +1,11 @@
 export default function Header() {
     return (
         <header
-        className="sticky top-0 bg-white p-4 text-black" 
+        className="absolute top-0 w-full p-4 z-20 flex justify-end text-white gap-3" 
         >
-            Header
+            <a>Home</a>
+            <a>About</a>
+            <a>Login</a>
         </header>
     )
 }
