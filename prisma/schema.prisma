@@ -7,87 +7,62 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model User {
-  id       Int     @id @default(autoincrement())
-  username String
-  email    String
-  password String?
+model RatingUser {
+id Int @id @default(autoincrement())
+username String 
+email String 
+password String? 
 
-  //---- Relations ----
-  authProvider AuthProvider[]
-  ratings      Rating[]
+ratings Rating[]
+authProviders AuthProvider[]
 }
 
 enum AuthProviderType {
   MICROSOFT
+  GOOGLE
 }
 
 model AuthProvider {
-  id             Int              @id @default(autoincrement())
-  userId         Int
-  provider       AuthProviderType
-  userProviderId String
+id Int @id @default(autoincrement())
+userId Int
+provider AuthProviderType
+userProviderId String 
 
-  //---- Relations ----
-  mealUser User @relation(fields: [userId], references: [id])
-  @@unique([provider, userProviderId])
+user RatingUser @relation(fields: [userId], references: [id])
+
+@@unique([provider, userProviderId])
 }
 
 model Meal {
-  id            Int            @id @default(autoincrement())
-  name          String
-  imageUrl      String
-  preparedMeals PreparedMeal[]
-  mealAllergen  MealAllergen[]
+id Int @id @default(autoincrement())
+name String 
+imageUrl String 
+
+preparedMeals PreparedMeal[]
 }
 
 model PreparedMeal {
-  id                 Int   @id @default(autoincrement())
-  mealId             Int
-  averageRating      Float
-  averageTemperature Float
+id Int @id @default(autoincrement())
+mealId Int
+averageRating Float
+averageTemperature Float
 
-  //---- Relations ----
-  meal    Meal     @relation(fields: [mealId], references: [id])
-  ratings Rating[]
+meal Meal @relation(fields: [mealId], references: [id])
+ratings Rating[]
 }
 
 model Rating {
-  id              Int     @id @default(autoincrement())
-  userId          Int
-  preparedMealId  Int
-  stars           Int
-  reviewMessage   String?
-  mealTemperature Float
+id Int @id @default(autoincrement())
+userId Int
+preparedMealId Int
+amount_of_meal_rating Int
+acceptable_cost_raise Float
 
-  //---- Relations ----
-  user         User         @relation(fields: [userId], references: [id])
-  preparedMeal PreparedMeal @relation(fields: [preparedMealId], references: [id])
+user RatingUser @relation(fields: [userId], references: [id])
+preparedMeal PreparedMeal @relation(fields: [preparedMealId], references: [id])
 
-  // Ensures that only one review can be made per user per meal
-  @@unique([userId, preparedMealId])
-  @@index([preparedMealId])
-}
-
-model Allergen {
-  id           Int    @id @default(autoincrement())
-  name         String
-  consequences String
-
-  //---- Relations ----
-  mealAllergens MealAllergen[]
-}
-
-model MealAllergen {
-  id         Int @id @default(autoincrement())
-  mealId     Int
-  allergenId Int
-
-  //---- Relations ----
-  meal     Meal     @relation(fields: [mealId], references: [id])
-  allergen Allergen @relation(fields: [allergenId], references: [id])
-
-  @@unique([mealId, allergenId])
-  @@index([mealId])
-  @@index([allergenId])
+@@unique([userId, preparedMealId])
+@@check([tempature_rating between 1 and 3])
+@@check([amount_of_meal_rating between 1 and 3])
+@@check([amount_of_meal_rating >= 0])
 }
