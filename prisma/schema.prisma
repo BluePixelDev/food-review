@@ -14,15 +14,25 @@ email String
 password String?
 
 auths AuthProvider[]
+comment_name CommentUserName[]
 }
 
 model Comment {
 id Int @id @default(autoincrement())
-random_name String
 prepared_meal_id Int 
 comment_added DateTime
 comment_content String
 relation_meal Rating @relation(fields: [prepared_meal_id], references: [id])
+random_name CommentUserName[]
+}
+
+model CommentUserName {
+id Int @id @default(autoincrement())
+user_id Int
+comment_id Int
+random_name String
+relation_user RatingUser @relation(fields: [user_id], references: [id])
+relation_comment Comment @relation(fields: [comment_id], references: [id])
 }
 
 enum AuthProviderType {
