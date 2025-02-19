@@ -3,7 +3,7 @@ export default function Footer() {
         <footer
         className="p-2 bg-white text-black"
         >
-            Footer
+            NEGR
         </footer>
     )
 }
