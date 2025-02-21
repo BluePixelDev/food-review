@@ -1,23 +1,15 @@
 import * as React from 'react';
-import { BarChart } from '@mui/x-charts/BarChart';
+import prisma from '@/lib/prisma';
+import ContentArea from '@/components/ContentArea';
 export default function Stats() {
+    const userCount = prisma.user.count()
 
     return (
-        <BarChart
-            xAxis={[
-                {
-                    id: 'barCategories',
-                    data: ['bar A', 'bar B', 'bar C'],
-                    scaleType: 'band',
-                },
-            ]}
-            series={[
-                {
-                    data: [2, 5, 3],
-                },
-            ]}
-            width={500}
-            height={300}
-        />
+        <ContentArea>
+            <div className="text-center mt-16">
+                <h1 className="text-3xl text-gray-800">Accounts</h1>
+                <span className="text-6xl font-bold text-green-500 ml-2">{userCount}</span>
+            </div>
+        </ContentArea>
     );
 }

@@ -24,7 +24,7 @@ export default function ReviewButton(props: ReviewButtonProps) {
                 className={`text-3xl 
                     ${starred && !disabled ? 'animate-bounce text-yellow-300' : ''}
                     ${!starred && !disabled ? 'text-green-700' : ''}
-                    ${starred && disabled ? 'text-yellow-200' : ''}
+                    ${starred && disabled ? 'animate-bounce text-yellow-200' : ''}
                     ${!disabled ? 'group-hover:rotate-90' : 'text-gray-500'}
                     transition-all duration-300
                 `}
