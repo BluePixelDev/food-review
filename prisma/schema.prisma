@@ -7,73 +7,59 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model RatingUser {
-id Int @id @default(autoincrement())
-username String 
-email String 
-password String?
-
-auths AuthProvider[]
-comment_name CommentUserName[]
+model User {
+  id           Int               @id @default(autoincrement())
+  username     String
+  email        String             @unique
+  password     String?
+  commentNames CommentUserName[]
+  ratings      Rating[]
 }
 
-model Comment {
-id Int @id @default(autoincrement())
-prepared_meal_id Int 
-comment_added DateTime
-comment_content String
-relation_meal Rating @relation(fields: [prepared_meal_id], references: [id])
-random_name CommentUserName[]
-}
+model Menu {
+  id    Int      @id @default(autoincrement())
+  date  DateTime
+  meals Meal[]
 
-model CommentUserName {
-id Int @id @default(autoincrement())
-user_id Int
-comment_id Int
-random_name String
-relation_user RatingUser @relation(fields: [user_id], references: [id])
-relation_comment Comment @relation(fields: [comment_id], references: [id])
-}
-
-enum AuthProviderType {
-  MICROSOFT
-  GOOGLE
-  FACEBOOK
-  APPLE
-}
-
-model AuthProvider {
-id Int @id @default(autoincrement())
-userId Int
-provider AuthProviderType @unique
-userProviderId String @unique
-relation_user RatingUser @relation(fields: [userId], references: [id])
+  @@unique([date])
 }
 
 model Meal {
-id Int @id @default(autoincrement())
-name String 
-imageUrl String 
-
-prepared_meals PreparedMeal[]
-}
-
-model PreparedMeal {
-id Int @id @default(autoincrement())
-mealId Int
-averageRating Float
-averageTemperature Float
-relation_meal Meal @relation(fields: [mealId], references: [id])
-
-ratings Rating[]
+  id       Int      @id @default(autoincrement())
+  name     String
+  imageUrl String
+  Menu     Menu[]
+  Rating   Rating[]
 }
 
 model Rating {
-id Int @id @default(autoincrement())
-preparedMealId Int @unique
-amount_of_meal_rating Int 
-acceptable_cost_raise Float @default(0.0)
+  id                  Int      @id @default(autoincrement())
+  preparedMealId      Int
+  userId              Int
+  mealRating          Int // overall rating of the meal
+  temperatureRating   Int // e.g., scale 1-10 for temperature quality
+  acceptableCostRaise Float    @default(0.0) // how much extra cost is acceptable
+  createdAt           DateTime @default(now())
 
-comments Comment[]
-preparedMeal PreparedMeal @relation(fields: [preparedMealId], references: [id])
+  relation_meal Meal      @relation(fields: [preparedMealId], references: [id])
+  relation_user User      @relation(fields: [userId], references: [id])
+  comments      Comment[]
+}
+
+model Comment {
+  id              Int               @id @default(autoincrement())
+  ratingId        Int
+  comment_added   DateTime          @default(now())
+  comment_content String
+  relation_rating Rating            @relation(fields: [ratingId], references: [id])
+  commentNames    CommentUserName[]
+}
+
+model CommentUserName {
+  id               Int     @id @default(autoincrement())
+  userId           Int
+  commentId        Int
+  random_name      String
+  relation_user    User    @relation(fields: [userId], references: [id])
+  relation_comment Comment @relation(fields: [commentId], references: [id])
 }
