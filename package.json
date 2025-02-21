@@ -13,7 +13,7 @@
     "@prisma/client": "^6.2.1",
     "food-review": "file:",
     "next": "15.1.6",
-    "node-cmd": "^5.0.0",
+    "next-auth": "^4.24.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sqlite3": "^5.1.7"
