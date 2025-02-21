@@ -7,16 +7,73 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model User {
-  id Int @default(autoincrement())
-  username String
+model RatingUser {
+id Int @id @default(autoincrement())
+username String 
+email String 
+password String?
 
-  @@id([id])
+auths AuthProvider[]
+comment_name CommentUserName[]
 }
 
-model Food {
-  id Int @default(autoincrement())
-  name String
+model Comment {
+id Int @id @default(autoincrement())
+prepared_meal_id Int 
+comment_added DateTime
+comment_content String
+relation_meal Rating @relation(fields: [prepared_meal_id], references: [id])
+random_name CommentUserName[]
+}
 
-  @@id([id])
+model CommentUserName {
+id Int @id @default(autoincrement())
+user_id Int
+comment_id Int
+random_name String
+relation_user RatingUser @relation(fields: [user_id], references: [id])
+relation_comment Comment @relation(fields: [comment_id], references: [id])
+}
+
+enum AuthProviderType {
+  MICROSOFT
+  GOOGLE
+  FACEBOOK
+  APPLE
+}
+
+model AuthProvider {
+id Int @id @default(autoincrement())
+userId Int
+provider AuthProviderType @unique
+userProviderId String @unique
+relation_user RatingUser @relation(fields: [userId], references: [id])
+}
+
+model Meal {
+id Int @id @default(autoincrement())
+name String 
+imageUrl String 
+
+prepared_meals PreparedMeal[]
+}
+
+model PreparedMeal {
+id Int @id @default(autoincrement())
+mealId Int
+averageRating Float
+averageTemperature Float
+relation_meal Meal @relation(fields: [mealId], references: [id])
+
+ratings Rating[]
+}
+
+model Rating {
+id Int @id @default(autoincrement())
+preparedMealId Int @unique
+amount_of_meal_rating Int 
+acceptable_cost_raise Float @default(0.0)
+
+comments Comment[]
+preparedMeal PreparedMeal @relation(fields: [preparedMealId], references: [id])
 }
