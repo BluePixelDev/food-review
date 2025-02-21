@@ -1,0 +1,22 @@
+name: Deploy Workflow
+on: 
+  push:
+    branches:
+      - production
+jobs:
+ deploy:
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: Setup SSH Connection
+      env: 
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        REMOTE_PATH: ${{ secrets.REMOTE_PATH }}
+      run: |
+        echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
+        ssh -o StrictHostKeyChecking=no -i private_key $REMOTE_USER@$REMOTE_HOST "cd $REMOTE_PATH && ./deploy.sh"
+        rm -f private_key

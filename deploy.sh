@@ -2,6 +2,9 @@
 
 export NODE_ENV=production
 
+echo "Pulling Repo..."
+git pull
+
 # Build the Next.js app
 echo "Building Next.js app..."
 npm run build
