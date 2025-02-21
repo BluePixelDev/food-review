@@ -3,32 +3,29 @@
 import { Icon } from "@iconify/react"
 
 type ReviewButtonProps = {
-    state?: "Active" | "Disabled" | "Starred"
+    starred: boolean
+    disabled: boolean
     onClick?: () => void
 }
 
 export default function ReviewButton(props: ReviewButtonProps) {
-    const { state, onClick } = props;
-
-    const isDisabled = state === "Disabled";
-    const isStarred = state === "Starred";
-    const isActive = state === "Active";
+    const { starred, disabled, onClick } = props;
 
     return (
         <button
             className={`p-3 rounded-lg shadow-lg transition-transform duration-300 group
-                ${isDisabled ? 'bg-gray-400 cursor-not-allowed' : 'bg-submit'} 
-                ${isActive ? '' : 'group'}
+                ${disabled ? 'bg-gray-400 cursor-not-allowed group' : 'bg-submit cursor-pointer'} 
             `}
-            onClick={isActive ? onClick : undefined}
-            disabled={isDisabled}
+            onClick={!disabled ? onClick : undefined}
+            disabled={!disabled}
         >
-           <Icon
+            <Icon
                 icon="material-symbols:kid-star-sharp"
-                className={`text-submit_darker text-3xl
-                    ${isStarred ? 'animate-bounce  text-yellow-300' : ''}
-                    ${isActive ? 'group-hover:rotate-90' : ''}
-                    ${isDisabled ? 'text-gray-300' : ''}
+                className={`text-3xl 
+                    ${starred && !disabled ? 'animate-bounce text-yellow-300' : ''}
+                    ${!starred && !disabled ? 'text-green-700' : ''}
+                    ${starred && disabled ? 'text-yellow-200' : ''}
+                    ${!disabled ? 'group-hover:rotate-90' : 'text-gray-500'}
                     transition-all duration-300
                 `}
             />

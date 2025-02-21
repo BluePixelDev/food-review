@@ -8,15 +8,58 @@ datasource db {
 }
 
 model User {
-  id Int @default(autoincrement())
-  username String
-
-  @@id([id])
+  id           Int               @id @default(autoincrement())
+  username     String
+  email        String             @unique
+  password     String?
+  commentNames CommentUserName[]
+  ratings      Rating[]
 }
 
-model Food {
-  id Int @default(autoincrement())
-  name String
+model Menu {
+  id    Int      @id @default(autoincrement())
+  date  DateTime
+  meals Meal[]
 
-  @@id([id])
+  @@unique([date])
+}
+
+model Meal {
+  id       Int      @id @default(autoincrement())
+  name     String
+  imageUrl String
+  Menu     Menu[]
+  Rating   Rating[]
+}
+
+model Rating {
+  id                  Int      @id @default(autoincrement())
+  preparedMealId      Int
+  userId              Int
+  mealRating          Int // overall rating of the meal
+  temperatureRating   Int // e.g., scale 1-10 for temperature quality
+  acceptableCostRaise Float    @default(0.0) // how much extra cost is acceptable
+  createdAt           DateTime @default(now())
+
+  relation_meal Meal      @relation(fields: [preparedMealId], references: [id])
+  relation_user User      @relation(fields: [userId], references: [id])
+  comments      Comment[]
+}
+
+model Comment {
+  id              Int               @id @default(autoincrement())
+  ratingId        Int
+  comment_added   DateTime          @default(now())
+  comment_content String
+  relation_rating Rating            @relation(fields: [ratingId], references: [id])
+  commentNames    CommentUserName[]
+}
+
+model CommentUserName {
+  id               Int     @id @default(autoincrement())
+  userId           Int
+  commentId        Int
+  random_name      String
+  relation_user    User    @relation(fields: [userId], references: [id])
+  relation_comment Comment @relation(fields: [commentId], references: [id])
 }

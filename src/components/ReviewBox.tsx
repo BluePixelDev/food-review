@@ -1,24 +1,22 @@
-import Image from 'next/image';
 import ReviewButton from './ReviewButton';
 
-export default function ReviewBox() {
-    return (
-        <div className="bg-white rounded-lg p-4 flex items-center gap-4 border-b-4 border-gray-300 m-3">
-            <div className="w-32 h-32 ml-4">
-                <Image
-                    src="/placeholder-image.png"
-                    alt="Review"
-                    width={1000}
-                    height={1000}
-                    className="w-full h-full object-cover rounded-md"
-                />
-            </div>
+type ReviewBoxProps = {
+    menu: string[]
+    date: Date
+    disabled: boolean
+    reviewed: boolean
+}
 
+export default function ReviewBox({menu, date, reviewed, disabled}:ReviewBoxProps) {
+    return (
+        <div className={`bg-white rounded-lg p-4 flex items-center gap-4 shadow-lg m-3 ${disabled ? 'opacity-60' : ''}`}>
             <div className="flex-1">
-                <h3 className="text-lg font-bold text-black">Review Title</h3>
-                <span className="text-xs text-gray-400">January 30, 2025</span>
+                {menu.map((x, i) => {
+                    return <h3 key={i} className="text-lg font-bold text-black">{x}</h3>
+                })}
+                <span className="text-xs text-gray-400">{date.toISOString()}</span>
             </div>
-            <ReviewButton state="Starred"/>
+            <ReviewButton starred={reviewed} disabled={disabled} />
         </div>
     );
 }

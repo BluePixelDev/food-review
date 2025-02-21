@@ -15,7 +15,7 @@ export default function Banner() {
 
             {/* Title Text */}
             <div className="absolute inset-0 flex items-center justify-center text-white text-3xl md:text-5xl lg:text-6xl font-bold">
-                Food Review
+                Jídelna
             </div>
         </div>
     );

@@ -17,7 +17,5 @@ declare module "next-auth" {
         idToken?: string;
         /** Custom user id */
         id?: number;
-        /** Custom user role */
-        role?: string;
     }
 }
